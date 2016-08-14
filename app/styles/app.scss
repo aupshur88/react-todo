@@ -1,0 +1,15 @@
+@import "base/variables";
+
+//foundation
+@import "base/foundation-settings";
+@import "foundation";
+@include foundation-everything;
+
+//Components
+
+
+
+
+body, h1, h2, h3, h4, h5 {
+  font-family: Arial, Helvetica, sans-serif;
+}
