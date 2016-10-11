@@ -7,10 +7,10 @@ handleSubmit: function (e) {
   e.preventDefault();
   var todoText = this.refs.todoText.value;
   var {dispatch} = this.props;
-  
+
   if (todoText.length > 0) {
     this.refs.todoText.value = '';
-    dispatch(actions.addTodo(todoText));
+    dispatch(actions.startAddTodo(todoText));
   } else {
     this.refs.todoText.focus();
   }
