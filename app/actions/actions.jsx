@@ -56,6 +56,31 @@ export var addTodos = (todos) => {
   };
 };
 
+export var startAddTodos = () => {
+  return (dispatch, getState) => {
+
+    var todoRef = firebaseRef.child('todos')
+    //Access firebase data
+    return todoRef.once('value').then((snapshot) => {
+
+      //Receive Todos from firebase
+      var todos = snapshot.val() || {};
+      var keys = Object.keys(todos);
+
+      //Correct format friebase to redux store
+      var updatedTodos = keys.map((key) => {
+        return {
+          ...todos[key],
+          id: key
+        }
+      });
+
+      //Pass corrected data to redux store
+      dispatch(addTodos(updatedTodos));
+    });
+  };
+};
+
 export var startToggleTodo = (id, completed) => {
   return (dispatch, getState) => {
     var todoRef = firebaseRef.child(`todos/${id}`);
