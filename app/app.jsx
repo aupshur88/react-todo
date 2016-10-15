@@ -12,13 +12,12 @@ firebase.auth().onAuthStateChanged((user) => {
   if (user) {
     hashHistory.push('/todos');
     store.dispatch(actions.login(user.uid));
+    store.dispatch(actions.startAddTodos());
   } else {
     store.dispatch(actions.logout());
     hashHistory.push('/');
   }
 });
-
-store.dispatch(actions.startAddTodos());
 
 // Load foundation
 $(document).foundation();
