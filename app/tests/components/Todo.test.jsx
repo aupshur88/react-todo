@@ -16,16 +16,34 @@ describe('Todo', () => {
     var todoData = {
       id: 11,
       text: 'Clean bathroom',
-      completed: false
+      completed: false,
+      isEdit: false
     };
     var action = actions.startToggleTodo(todoData.id, !todoData.completed);
 
     var spy = expect.createSpy();
     var todo = TestUtils.renderIntoDocument(<Todo {...todoData} dispatch={spy}/>);
     var $el = $(ReactDOM.findDOMNode(todo));
+    TestUtils.Simulate.click(todo.refs.checkbox);
 
-    TestUtils.Simulate.click($el[0]);
+    expect(spy).toHaveBeenCalledWith(action);
+  })
 
-    expect(spy). toHaveBeenCalledWith(action);
+  it('should dispatch actions UPDATE_TODO & saveToDatabase when isEdit is true and img is clicked', () => {
+    var todoData = {
+      id: 11,
+      text: 'Clean bathroom',
+      completed: false,
+      isEdit: true
+    };
+    var action = actions.updateTodo(todoData.id, { isEdit: !todoData.isEdit });
+    var action2 = actions.saveToDatabase(todoData.id);
+
+    var spy = expect.createSpy();
+    var todo = TestUtils.renderIntoDocument(<Todo {...todoData} dispatch={spy}/>);
+    TestUtils.Simulate.click(todo.refs.Ok);
+
+    expect(spy).toHaveBeenCalledWith(action);
+    expect(spy).toHaveBeenCalledWith(action2);
   })
 });

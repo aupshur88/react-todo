@@ -22,17 +22,27 @@ export var addTodo = (todo) => {
   };
 };
 
+export var toggleEditMode = (id, isEdit) => {
+  return {
+    type: 'EDIT_TODO',
+    id,
+    isEdit
+  };
+};
+
 export var startAddTodo = (text) => {
   return (dispatch, getState) => {
     var todo = {
       text,
       completed: false,
       createdAt: moment().unix(),
-      completedAt: null
+      completedAt: null,
+      isEdit: false,
+      previousText: ''
     };
     var uid = getState().auth.uid;
     var todoRef = firebaseRef.child(`users/${uid}/todos`).push(todo);
-
+    console.log(todoRef.key);
     return todoRef.then(() => {
       dispatch(addTodo({
         ...todo,
@@ -56,6 +66,19 @@ export var addTodos = (todos) => {
     todos
   };
 };
+
+export var saveToDatabase = (id) => {
+  return (dispatch, getState) => {
+    var uid = getState().auth.uid;
+    var todoRef = firebaseRef.child(`users/${uid}/todos/${id}`);
+
+    var updateArray = getState().todos.filter((todo) => {
+      return todo.id == id;
+    });
+
+    return todoRef.update(updateArray[0]);
+  };
+}
 
 export var startAddTodos = () => {
   return (dispatch, getState) => {
